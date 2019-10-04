@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+    <script src="../static/js/jquery-1.12.3.min.js"></script>
+</head>
+<body>
+    <div>username </div>
+    <input placeholder="username" id="username">
+    <div>password </div>
+    <input placeholder="password" type="password" id="password">
+
+    <button type="button" id="loginbtn">login</button>
+</body>
+
+
+<script>
+    window.onload = function () {
+        // var jsn = {username:document.getElementById('username').value,password:document.getElementById('password').value}
+        document.getElementById('loginbtn').onclick = function () {
+            $.ajax({
+                type: "GET",
+                contentType: 'application/json',
+                url:  `/login?username=${document.getElementById('username').value}&password=${document.getElementById('password').value}`,
+                // dataType: "json",
+                error: function(){},
+                // data: jsn,
+                success:function(response){
+
+                    document.write(response);
+       }
+
+    });
+        }
+    }
+
+</script>
+
+
+
+</html>

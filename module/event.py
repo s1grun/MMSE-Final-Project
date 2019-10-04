@@ -15,35 +15,43 @@ class Event:
         self.budget = budget
         self.eventId = eventId
 
-    def createEvent(self, submitTo):
+    def createEvent(self, to):
 
         fname = str(self.eventId)
 
         if checkDate(self.startDate,self.endDate):
 
-            f = open('../storage/event/'+fname,'w')
-            f.write('clientName:'+ self.clientName)
-            f.write('eventName:'+ self.eventName)
-            f.write('startDate:'+ self.startDate)
-            f.write('endDate:'+ self.endDate)
-            f.write('budget:'+ str(self.budget))
-            f.write('eventId:'+ str(self.eventId))
+            f = open('./storage/event/'+fname,'w')
+            f.write('clientName: '+ self.clientName + '\n')
+            f.write('eventName: '+ self.eventName+ '\n')
+            f.write('startDate: '+ self.startDate+ '\n')
+            f.write('endDate: '+ self.endDate+ '\n')
+            f.write('budget: '+ str(self.budget)+ '\n')
+            f.write('eventId: '+ str(self.eventId)+ '\n')
             f.close()
+
+            self.submitTo(to)
             return True
         else:
             return False
 
-
-
-
-    def viewEvent(self, eventId):
+    @staticmethod
+    def viewEvent(eventId):
 
         fname = str(eventId)
-        f = open('../storage/event/' + fname, 'r')
+        f = open('./storage/event/' + fname, 'r')
         event = f.read()
+        # print(event)
         f.close()
+        eventArr = event.split('\n')
 
-        return event
+        return eventArr
+
+    def submitTo(self, to):
+
+        f = open('./storage/' + to, 'a')
+        f.write(str(self.eventId)+' unread\n')
+        f.close()
 
 
 

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <script src="../static/js/jquery-1.12.3.min.js"></script>
+    <script>
+// $(function() {
+    // $('#creatseEvent').click(function(){
+    //         console.log(1234);
+    //         openForm();
+    //         return false; });});
+
+    function viewEvent(){
+
+    }
+
+    function openForm() {
+        document.getElementById('form').style.display = 'block'
+    }
+
+    function viewEvent(eventId) {
+        $.ajax({
+                type: "GET",
+                contentType: 'application/json',
+                url:  `/viewEvent?eventId=${eventId}`,
+                dataType: "json",
+                error: function(){},
+                // data: jsn,
+                success:function(response){
+                    var view = document.getElementById('eventView');
+                    view.style.display = 'block';
+                    // console.log(JSON.parse(JSON.stringify(response) ));
+                    view.innerText ='';
+                    response.event.map(function (item, index) {
+                        console.log(item)
+                        var li = document.createElement('div');
+                        li.innerText = item;
+                        view.append(li);
+                    })
+
+                    view.innerHTML += `<button onclick="rejectEvent(eventId)"></button>`
+
+                    view.innerHTML += `<select name="submitTo" id="submitTo">
+                                            <option value="SCSO">SCSO</option>
+                                            <option value="FM">FM</option>
+                                            <option value="AM">AM</option>
+                                        </select><br/>`
+                    view.innerHTML += `<button onclick="submitEvent()"></button>`
+
+
+                }
+
+    });
+    }
+
+    function rejectEvent(id) {
+         $.ajax({
+                type: "GET",
+                contentType: 'application/json',
+                url:  `/rejectEvent?eventId=${id}`,
+                dataType: "json",
+                error: function(){},
+                // data: jsn,
+                success:function(response){
+
+                }
+         })
+    }
+
+    function submitEvent() {
+        var to = document.getElementById('submitTo').value;
+
+    }
+
+    // window.onload = function(){
+    //     console.log(1234);
+    //     var $btn = $('button');
+    //     console.log($btn);
+    // }
+
+
+
+</script>
+</head>
+<body>
+    <div id="user">Hi, {{ user }}</div>
+
+    {% for btn in views%}
+
+    {% if btn == 'createEvent'%}
+        <button id='createEvent' onclick="openForm()" >{{btn}}</button>
+    {% endif%}
+
+
+    {%endfor%}
+
+
+    {% if user == 'SCSO'%}
+        <ul>
+        {% for e in eventList %}
+            {% if e != ''%}
+            <a href="javascript:viewEvent({{e.split(' ')[0]}})"><li>{{e}}</li></a>
+            {% endif%}
+        {% endfor%}
+        </ul>
+    {% endif%}
+
+
+
+
+
+
+    <div id="form" style="display: none">
+        <form id="eventForm" action="/createEvent">
+            clientName<br/>
+            <select name="clientName">
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+            </select><br/>
+            eventName<br/>
+            <input type="text" name="eventName"><br/>
+            startDate<br/>
+            <input type="date" name="startDate"><br/>
+            endDate<br/>
+            <input type="date" name="endDate"><br/>
+            budget<br/>
+            <input type="number" name="budget"><br/>
+            submitTo<br>
+            <select name="submitTo">
+                <option value="SCSO">SCSO</option>
+                <option value="FM">FM</option>
+                <option value="AM">AM</option>
+            </select><br/>
+            <!--eventId<br/>-->
+            <!--<input type="text" value="time">-->
+            <input type="submit" value="Submit">
+        </form>
+
+    </div>
+
+
+    <div id="eventView">
+
+
+    </div>
+
+
+</body>
+
+
+
+
+</html>
