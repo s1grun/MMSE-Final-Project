@@ -9,8 +9,8 @@ class TestEvent(unittest.TestCase):
         event = E.Event('clientname','e1', '2019-01-10', '2019-01-11', 100, time.time())
         self.assertTrue(event.createEvent('scso'))
 
-        # event2 = E.Event('clientname', 'e2', '2019-01-11', '2019-01-10', 100, time.time())
-        # self.assertFalse(event2.createEvent('scso'))
+        event2 = E.Event('clientname', 'e2', '2019-01-11', '2019-01-10', 100, time.time())
+        self.assertFalse(event2.createEvent('scso'))
 
     #
     # def test_viewEvent(self):
