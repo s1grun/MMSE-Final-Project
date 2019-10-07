@@ -25,13 +25,13 @@ def login():
     if username == 'SCSO':
         [views, username, usr] = u.SCSO.login(username, pw)
         eventList =usr.getEventList()
-        return render_template('index.html', user=username, views=views, eventList=eventList)
+        return render_template('event.html', user=username, views=views, eventList=eventList)
 
     [views, username, usr]=u.User.login(username,pw)
 
     # if user == 'SCSO':
 
-    return render_template('index.html', user=username, views=views)
+    return render_template('event.html', user=username, views=views)
 
 
 
@@ -70,15 +70,35 @@ def viewEvent():
 
 
 @app.route("/rejectEvent")
-def viewEvent():
+def rejectEvent():
 
     eid = request.args.get("eventId")
+    who = request.args.get("user")
+
+    res = E.Event.rejectEvent(eid,who)
+
+    if res == True:
+        return {'res':'reject Successfully'}
+    else :
+        return {'res':'reject failed'}
+
+    # return {'event':event}
 
 
-    event = E.Event.rejectEvent(eid)
+@app.route("/submitEvent")
+def submitEvent():
 
-    return {'event':event}
+    to = request.args.get("to")
+    eid = request.args.get("eventId")
 
+    res = E.Event.submitTo(eid,to)
+
+    if res == True:
+        return {'res':'submit Successfully'}
+    else :
+        return {'res':'submit failed'}
+
+    # return {'event':event}
 
 
 if __name__ == '__main__':

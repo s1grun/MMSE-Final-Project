@@ -30,7 +30,7 @@ class Event:
             f.write('eventId: '+ str(self.eventId)+ '\n')
             f.close()
 
-            self.submitTo(to)
+            self.submitTo(fname,to)
             return True
         else:
             return False
@@ -47,11 +47,56 @@ class Event:
 
         return eventArr
 
-    def submitTo(self, to):
+    @staticmethod
+    def viewEvent(eventId):
+
+        fname = str(eventId)
+        f = open('./storage/event/' + fname, 'r')
+        event = f.read()
+        # print(event)
+        f.close()
+        eventArr = event.split('\n')
+
+        return eventArr
+    @staticmethod
+    def submitTo(eventId, to):
 
         f = open('./storage/' + to, 'a')
-        f.write(str(self.eventId)+' unread\n')
+        f.write(eventId+' unread\n')
         f.close()
+
+        return True
+
+    @staticmethod
+    def rejectEvent(eventId, who):
+
+        # fname = str(eventId)
+        f = open('./storage/' + who, 'r+')
+        lines = f.read()
+        lines = lines.split('\n')
+        print(lines)
+        new_line_arr = []
+        for line in lines:
+            print(str(line.split(' ')[0]))
+            if line.split(' ')[0] == eventId:
+                new_line_arr.append(eventId+' reject\n')
+            else:
+                new_line_arr.append(line)
+        f.close()
+
+        f = open('./storage/' + who, 'w')
+
+        newStr = ''.join(new_line_arr)
+        f.write(newStr)
+        # print(event)
+        f.close()
+
+        f2 = open('./storage/event/' + eventId, 'a')
+        f2.write('reject by '+who+'\n')
+        f2.close()
+
+
+        return True
 
 
 

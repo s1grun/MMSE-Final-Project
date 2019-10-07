@@ -19,7 +19,7 @@
         document.getElementById('form').style.display = 'block'
     }
 
-    function viewEvent(eventId) {
+    function viewEvent(eventId,type) {
         $.ajax({
                 type: "GET",
                 contentType: 'application/json',
@@ -39,14 +39,17 @@
                         view.append(li);
                     })
 
-                    view.innerHTML += `<button onclick="rejectEvent(eventId)"></button>`
+                    if(type=='unread'){
+                        view.innerHTML += `<button onclick="rejectEvent(${eventId})" id="reject-btn">reject</button><br/>`;
 
                     view.innerHTML += `<select name="submitTo" id="submitTo">
-                                            <option value="SCSO">SCSO</option>
+                                            <!--<option value="SCSO">SCSO</option>-->
                                             <option value="FM">FM</option>
                                             <option value="AM">AM</option>
                                         </select><br/>`
-                    view.innerHTML += `<button onclick="submitEvent()"></button>`
+                    view.innerHTML += `<button onclick="submitEvent(${eventId})" id="submit-btn">submit</button>`
+
+                    }
 
 
                 }
@@ -58,18 +61,39 @@
          $.ajax({
                 type: "GET",
                 contentType: 'application/json',
-                url:  `/rejectEvent?eventId=${id}`,
+                url:  `/rejectEvent?eventId=${id}&user={{user}}`,
                 dataType: "json",
                 error: function(){},
                 // data: jsn,
                 success:function(response){
+                    var view = document.getElementById('eventView');
+                    view.innerHTML += response.res;
+                    document.getElementById("reject-btn").style.display = 'none';
+                    document.getElementById("submitTo").style.display = 'none';
+                    document.getElementById("submit-btn").style.display = 'none';
 
                 }
          })
     }
 
-    function submitEvent() {
+    function submitEvent(id) {
         var to = document.getElementById('submitTo').value;
+        $.ajax({
+                type: "GET",
+                contentType: 'application/json',
+                url:  `/submitEvent?to=${to}&eventId=${id}`,
+                dataType: "json",
+                error: function(){},
+                // data: jsn,
+                success:function(response){
+                    var view = document.getElementById('eventView');
+                    view.innerHTML += response.res;
+                    document.getElementById("reject-btn").style.display = 'none';
+                    document.getElementById("submitTo").style.display = 'none';
+                    document.getElementById("submit-btn").style.display = 'none';
+
+                }
+         })
 
     }
 
@@ -100,7 +124,7 @@
         <ul>
         {% for e in eventList %}
             {% if e != ''%}
-            <a href="javascript:viewEvent({{e.split(' ')[0]}})"><li>{{e}}</li></a>
+            <a href="javascript:viewEvent({{e.split(' ')[0]}},'{{e.split(' ')[1]}}')"><li>{{e}}</li></a>
             {% endif%}
         {% endfor%}
         </ul>
@@ -127,7 +151,7 @@
             <input type="date" name="endDate"><br/>
             budget<br/>
             <input type="number" name="budget"><br/>
-            submitTo<br>
+            submitTo<br/>
             <select name="submitTo">
                 <option value="SCSO">SCSO</option>
                 <option value="FM">FM</option>
