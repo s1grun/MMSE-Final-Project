@@ -1,2 +1,4 @@
 
 /.idea
+module/__pycache__/
+storage/event/
