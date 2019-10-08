@@ -1,7 +1,7 @@
 import time
 import module.event as E
 import module.user as u
-import module.task as T
+# import module.task as T
 from flask import Flask, render_template, request
 
 app = Flask(__name__, static_url_path='/static')
@@ -57,9 +57,9 @@ def createEvent():
 
     newEvent = E.Event(clientName,eventName,startDate,endDate,budget,int(time.time()))
     if E.Event.createEvent(newEvent,submitTo):
-        return 'event created !'
+        return '<a href="javascript:window.history.go(-1)"><- back</a><br> event created !'
     else:
-        return 'fail to create !'
+        return '<a href="javascript:window.history.go(-1)"><- back</a><br> fail to create !'
 
 
 

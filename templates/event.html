@@ -11,15 +11,22 @@
     //         openForm();
     //         return false; });});
 
-    function viewEvent(){
 
-    }
+function hideForm() {
+    $('#form1').css('display','none');
+        $('#form2').css('display','none');
+        $('#form3').css('display','none');
+}
 
-    function openForm() {
-        document.getElementById('form').style.display = 'block'
+// forgot to inform scso
+    function openForm(t) {
+        $('#taskView').css('display','none');
+        hideForm();
+        document.getElementById('form'+t).style.display = 'block'
     }
 
     function viewEvent(eventId,type) {
+        hideForm();
         $.ajax({
                 type: "GET",
                 contentType: 'application/json',
@@ -120,11 +127,129 @@
 
     }
 
+
+
+
+
+
+    function viewTask(taskId, type) {
+        hideForm();
+        $('#taskView').css('display','block');
+        $.ajax({
+            type: "GET",
+            contentType: 'application/json',
+            url: `/viewTask?taskId=${taskId}`,
+            dataType: "json",
+            error: function () {
+            },
+            // data: jsn,
+            success: function (response) {
+                var view = document.getElementById('taskView');
+                view.style.display = 'block';
+                // console.log(JSON.parse(JSON.stringify(response) ));
+                view.innerText = '';
+                response.event.map(function (item, index) {
+                    console.log(item);
+                    var li = document.createElement('div');
+                    li.innerText = item;
+                    view.append(li);
+                });
+                if(type=='unread'){
+
+
+                        if('{{user}}' == 'subTeam'){
+                            view.innerHTML += `<textarea id="comment"></textarea><br/>`;
+                        }
+
+                             view.innerHTML += `<select name="submitTo" id="submitTo">
+
+                                            <option value="SMPM">SMPM</option>
+                                        </select><br/>`
+                            view.innerHTML += `<button onclick="submitTask(${taskId})" id="submit-btn">submit</button>`
+
+
+
+                    }
+
+
+            }
+        })
+
+    }
+
+    function submitTask(id) {
+         var to = document.getElementById('submitTo').value;
+        var cmt = document.getElementById('comment').value;
+        $.ajax({
+                type: "GET",
+                contentType: 'application/json',
+                url:  `/submitTask?to=${to}&taskId=${id}&comment=${cmt}&from={{user}}`,
+                dataType: "json",
+                error: function(){},
+                // data: jsn,
+                success:function(response){
+                    var view = document.getElementById('taskView');
+                    view.innerHTML += response.res;
+                    hide()
+
+                }
+         })
+    }
+
+
     // window.onload = function(){
     //     console.log(1234);
     //     var $btn = $('button');
     //     console.log($btn);
     // }
+    // function createHiringRequest(){
+    //
+    // }
+    function viewHiringRequest(taskId, type) {
+        hideForm();
+        $('#taskView').css('display','block');
+        $.ajax({
+            type: "GET",
+            contentType: 'application/json',
+            url: `/viewTask?taskId=${taskId}`,
+            dataType: "json",
+            error: function () {
+            },
+            // data: jsn,
+            success: function (response) {
+                var view = document.getElementById('taskView');
+                view.style.display = 'block';
+                // console.log(JSON.parse(JSON.stringify(response) ));
+                view.innerText = '';
+                response.event.map(function (item, index) {
+                    console.log(item);
+                    var li = document.createElement('div');
+                    li.innerText = item;
+                    view.append(li);
+                });
+                if(type=='unread'){
+
+
+                        if('{{user}}' == 'subTeam'){
+                            view.innerHTML += `<textarea id="comment"></textarea><br/>`;
+                        }
+
+                             view.innerHTML += `<select name="submitTo" id="submitTo">
+
+                                            <option value="SMPM">SMPM</option>
+                                        </select><br/>`
+                            view.innerHTML += `<button onclick="submitTask(${taskId})" id="submit-btn">submit</button>`
+
+
+
+                    }
+
+
+            }
+        })
+
+    }
+
 
 
 
@@ -136,21 +261,61 @@
     {% for btn in views%}
 
     {% if btn == 'createEvent'%}
-        <button id='createEvent' onclick="openForm()" >{{btn}}</button>
+        <button id='createEvent' onclick="openForm(1)" >{{btn}}</button>
     {% endif%}
+
+    {% if btn == 'createTask'%}
+        <button id='createTask' onclick="openForm(2)" >{{btn}}</button>
+    {% endif%}
+
+    {% if btn == 'createHiringRequest'%}
+        <button id='createHiringRequest' onclick="openForm(3)" >{{btn}}</button>
+    {% endif%}
+
+    <!--{% if btn == 'viewHiringRequest'%}-->
+        <!--<button id='viewHiringRequest' onclick="openForm(3)" >{{btn}}</button>-->
+    <!--{% endif%}-->
 
 
     {%endfor%}
 
 
     {% if user == 'SCSO' or user == 'FM' or user =='AM'%}
-        <ul>
+        <div>
+            event view:
+            <ul>
         {% for e in eventList %}
             {% if e != ''%}
             <a href="javascript:viewEvent({{e.split(' ')[0]}},'{{e.split(' ')[1]}}')"><li>{{e}}</li></a>
             {% endif%}
         {% endfor%}
-        </ul>
+            </ul>
+
+             <div id="eventView">
+
+
+            </div>
+        </div>
+
+    {% endif%}
+
+    {% if user == 'SMPM' or user == 'subTeam'%}
+        <div>
+            task view:
+            <ul>
+        {% for tsk in taskList %}
+            {% if tsk != ''%}
+            <a href="javascript:viewTask({{tsk.split(' ')[0]}},'{{tsk.split(' ')[1]}}')"><li>{{tsk}}</li></a>
+            {% endif%}
+        {% endfor%}
+            </ul>
+
+             <div id="taskView">
+
+
+            </div>
+        </div>
+
     {% endif%}
 
 
@@ -158,7 +323,9 @@
 
 
 
-    <div id="form" style="display: none">
+
+
+    <div id="form1" style="display: none">
         <form id="eventForm" action="/createEvent">
             clientName<br/>
             <select name="clientName">
@@ -188,10 +355,36 @@
     </div>
 
 
-    <div id="eventView">
 
+    <div id="form2" style="display: none">
+        <form id="taskForm" action="/createTask">
+            clientName<br/>
+            <select name="clientName">
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+            </select><br/>
+            eventName<br/>
+            <input type="text" name="eventName"><br/>
+            taskName<br/>
+            <input type="text" name="taskName"><br/>
+            activity<br/>
+            <input type="text" name="activity"><br/>
+            budget<br/>
+            <input type="number" name="budget"><br/>
+            submitTo<br/>
+            <select name="submitTo">
+                <option value="subTeam">subTeam</option>
+            </select><br/>
+            <!--eventId<br/>-->
+            <!--<input type="text" value="time">-->
+            <input type="submit" value="Submit">
+        </form>
 
     </div>
+
+
+
 
 
 </body>

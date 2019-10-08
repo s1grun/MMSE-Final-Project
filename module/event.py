@@ -94,7 +94,7 @@ class Event:
         for line in lines:
             print(str(line.split(' ')[0]))
             if line.split(' ')[0] == eventId:
-                new_line_arr.append(eventId+' '+t +'\n')
+                new_line_arr.append(eventId+' read\n')
             else:
                 new_line_arr.append(line+'\n')
         f.close()

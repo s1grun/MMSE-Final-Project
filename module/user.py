@@ -95,7 +95,7 @@ class AM(User):
 class SMPM(User):
 
     def getViewList(self):
-        self.viewList = ['createTask']
+        self.viewList = ['createTask', 'viewTask', 'createHiringRequest']
         return self.viewList
     def getTaskList(self):
 
