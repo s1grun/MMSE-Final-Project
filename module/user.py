@@ -21,6 +21,12 @@ class User:
         elif username == 'AM':
             usr = AM(username, password)
 
+        elif username == 'SMPM':
+            usr = SMPM(username, password)
+
+        elif username == 'subTeam':
+            usr = subTeam(username, password)
+
 
         return [usr.getViewList(), username, usr]
         # return usr
@@ -85,3 +91,33 @@ class AM(User):
         eventArr = eventList.split('\n')
 
         return eventArr
+
+class SMPM(User):
+
+    def getViewList(self):
+        self.viewList = ['createTask']
+        return self.viewList
+    def getTaskList(self):
+
+        fname = str('SMPM')
+        f = open('./storage/' + fname, 'r')
+        taskList = f.read()
+        f.close()
+        taskArr = taskList.split('\n')
+
+        return taskArr
+
+class subTeam(User):
+
+    def getViewList(self):
+        self.viewList = ['viewTask']
+        return self.viewList
+    def getTaskList(self):
+
+        fname = str('subTeam')
+        f = open('./storage/' + fname, 'r')
+        taskList = f.read()
+        f.close()
+        taskArr = taskList.split('\n')
+
+        return taskArr

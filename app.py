@@ -1,8 +1,9 @@
-from flask import Flask,request,render_template
-
-import module.user as u
-import module.event as E
 import time
+import module.event as E
+import module.user as u
+import module.task as T
+from flask import Flask, render_template, request
+
 app = Flask(__name__, static_url_path='/static')
 
 
@@ -114,6 +115,45 @@ def submitEvent():
         return {'res':'submit failed'}
 
     # return {'event':event}
+
+@app.route("/createTask")
+def createTask():
+    taskName = request.args.get("taskName")
+    eventName = request.args.get("eventName")
+    activity = request.args.get("activity")
+    budget = request.args.get("budget")
+    submitTo = request.args.get("submitTo")
+
+
+    newTask = T.Task(taskName, eventName, activity, budget)
+    if T.Task.createEvent(newTask,submitTo):
+        return 'task created !'
+    else:
+        return 'fail to create !'
+
+@app.route("/viewTask")
+def viewTask():
+
+    tid = request.args.get("taskId")
+
+
+    task = T.Task.viewTask(tid)
+
+    return {'task':task}
+
+@app.route("/updateTask")
+def updateTask():
+
+    tid = request.args.get("taskId")
+    who = request.args.get("user")
+    #t = request.args.get("type")
+
+    res = T.Task.updateTask(tid, who)
+
+    if res == True:
+        return {'res Successfully'}
+    else :
+        return {'res failed'}
 
 
 if __name__ == '__main__':

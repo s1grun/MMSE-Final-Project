@@ -35,17 +35,6 @@ class Event:
         else:
             return False
 
-    @staticmethod
-    def viewEvent(eventId):
-
-        fname = str(eventId)
-        f = open('./storage/event/' + fname, 'r')
-        event = f.read()
-        # print(event)
-        f.close()
-        eventArr = event.split('\n')
-
-        return eventArr
 
     @staticmethod
     def viewEvent(eventId):
