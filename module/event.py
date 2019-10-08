@@ -59,16 +59,42 @@ class Event:
 
         return eventArr
     @staticmethod
-    def submitTo(eventId, to):
+    def submitTo(eventId, to, From=None, cmt=None):
 
         f = open('./storage/' + to, 'a')
         f.write(eventId+' unread\n')
         f.close()
 
+        if cmt is not None and cmt!='':
+            f2 = open('./storage/event/' + eventId, 'a')
+            f2.write('comment ' + cmt + '\n')
+            f2.close()
+
+        if From is not None:
+            f = open('./storage/' + From, 'r+')
+            lines = f.read()
+            lines = lines.split('\n')
+            # print(lines)
+            new_line_arr = []
+            for line in lines:
+                print(str(line.split(' ')[0]))
+                if line.split(' ')[0] == eventId:
+                    new_line_arr.append(eventId + ' read\n')
+                else:
+                    new_line_arr.append(line + '\n')
+            f.close()
+
+            f = open('./storage/' + From, 'w')
+
+            newStr = ''.join(new_line_arr)
+            f.write(newStr)
+            # print(event)
+            f.close()
+
         return True
 
     @staticmethod
-    def rejectEvent(eventId, who):
+    def updateEvent(eventId, who, t):
 
         # fname = str(eventId)
         f = open('./storage/' + who, 'r+')
@@ -79,9 +105,9 @@ class Event:
         for line in lines:
             print(str(line.split(' ')[0]))
             if line.split(' ')[0] == eventId:
-                new_line_arr.append(eventId+' reject\n')
+                new_line_arr.append(eventId+' '+t +'\n')
             else:
-                new_line_arr.append(line)
+                new_line_arr.append(line+'\n')
         f.close()
 
         f = open('./storage/' + who, 'w')
@@ -92,7 +118,7 @@ class Event:
         f.close()
 
         f2 = open('./storage/event/' + eventId, 'a')
-        f2.write('reject by '+who+'\n')
+        f2.write(t+'ed by '+who+'\n')
         f2.close()
 
 

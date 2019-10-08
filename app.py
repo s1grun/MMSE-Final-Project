@@ -26,6 +26,14 @@ def login():
         [views, username, usr] = u.SCSO.login(username, pw)
         eventList =usr.getEventList()
         return render_template('event.html', user=username, views=views, eventList=eventList)
+    elif username == 'FM':
+        [views, username, usr] = u.FM.login(username, pw)
+        eventList =usr.getEventList()
+        return render_template('event.html', user=username, views=views, eventList=eventList)
+    elif username == 'AM':
+        [views, username, usr] = u.FM.login(username, pw)
+        eventList =usr.getEventList()
+        return render_template('event.html', user=username, views=views, eventList=eventList)
 
     [views, username, usr]=u.User.login(username,pw)
 
@@ -69,18 +77,19 @@ def viewEvent():
     #     return 'fail to create !'
 
 
-@app.route("/rejectEvent")
-def rejectEvent():
+@app.route("/updateEvent")
+def updateEvent():
 
     eid = request.args.get("eventId")
     who = request.args.get("user")
+    t = request.args.get("type")
 
-    res = E.Event.rejectEvent(eid,who)
+    res = E.Event.updateEvent(eid,who,t)
 
     if res == True:
-        return {'res':'reject Successfully'}
+        return {'res':t+' Successfully'}
     else :
-        return {'res':'reject failed'}
+        return {'res':t+' failed'}
 
     # return {'event':event}
 
@@ -90,8 +99,14 @@ def submitEvent():
 
     to = request.args.get("to")
     eid = request.args.get("eventId")
+    cmt = request.args.get("comment")
+    F = request.args.get("from")
+    print('cmt',cmt)
 
-    res = E.Event.submitTo(eid,to)
+    # if cmt !='':
+    #     E.Event.submitTo(cmt, to)
+
+    res = E.Event.submitTo(eid,to, F,cmt)
 
     if res == True:
         return {'res':'submit Successfully'}
