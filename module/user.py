@@ -27,6 +27,9 @@ class User:
         elif username == 'subTeam':
             usr = subTeam(username, password)
 
+        elif username == 'HR':
+            usr = subTeam(username, password)
+
 
         return [usr.getViewList(), username, usr]
         # return usr
@@ -121,3 +124,18 @@ class subTeam(User):
         taskArr = taskList.split('\n')
 
         return taskArr
+
+class HR(User):
+
+    def getViewList(self):
+        self.viewList = ['viewHrr']
+        return self.viewList
+    def getHRList(self):
+
+        fname = str('HR')
+        f = open('./storage/' + fname, 'r')
+        hrrList = f.read()
+        f.close()
+        hrrArr = hrrList.split('\n')
+
+        return hrrArr

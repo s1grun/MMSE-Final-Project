@@ -125,7 +125,7 @@ def createTask():
     submitTo = request.args.get("submitTo")
 
 
-    newTask = T.Task(taskName, eventName, activity, budget)
+    newTask = T.Task(taskName, eventName, activity, budget, int(time.time()))
     if T.Task.createTask(newTask,submitTo):
         return 'task created !'
     else:
