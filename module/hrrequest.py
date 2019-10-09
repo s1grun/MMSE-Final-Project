@@ -1,10 +1,10 @@
-class hrrequest:
+class HrRequest:
     def __init__(self, role, desc, hrrId):
         self.role = role
         self. desc = desc
         self.budgetId = budgetId
 
-    def createhrRequest(self, to):
+    def createHrRequest(self, to):
         fname = str(self.hrrId)
 
         f = open('./storage/hrr/'+fname, 'w')
@@ -16,7 +16,7 @@ class hrrequest:
         self.submitTo(fname, to)
 
     @staticmethod
-    def viewTask(hrrId):
+    def viewHrRequest(hrrId):
 
         fname = str(hrrId)
         f = open('./storage/hrr/' + fname, 'r')
@@ -63,7 +63,7 @@ class hrrequest:
         return True
 
     @staticmethod
-    def updateEvent(hrrId, who, t):
+    def updateHrRequest(hrrId, who, t):
 
         # fname = str(eventId)
         f = open('./storage/' + who, 'r+')
