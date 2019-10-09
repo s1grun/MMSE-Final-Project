@@ -151,9 +151,30 @@ def updateTask():
     res = T.Task.updateTask(tid, who)
 
     if res == True:
-        return {'res Successfully'}
+        return {'res': 'Successfully'}
     else :
-        return {'res failed'}
+        return {'res': 'failed'}
+
+@app.route("/submitTask")
+def submitTask():
+
+    to = request.args.get("to")
+    tid = request.args.get("taskId")
+    cmt = request.args.get("comment")
+    F = request.args.get("from")
+    print('cmt',cmt)
+
+    # if cmt !='':
+    #     E.Event.submitTo(cmt, to)
+
+    res = T.Task.submitTo(tid,to, F,cmt)
+
+    if res == True:
+        return {'res':'submit Successfully'}
+    else :
+        return {'res':'submit failed'}
+
+    # return {'task':task}
 
 
 if __name__ == '__main__':
