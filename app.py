@@ -1,7 +1,7 @@
 import time
 import module.event as E
 import module.user as u
-# import module.task as T
+import module.task as T
 from flask import Flask, render_template, request
 
 app = Flask(__name__, static_url_path='/static')
@@ -126,7 +126,7 @@ def createTask():
 
 
     newTask = T.Task(taskName, eventName, activity, budget)
-    if T.Task.createEvent(newTask,submitTo):
+    if T.Task.createTask(newTask,submitTo):
         return 'task created !'
     else:
         return 'fail to create !'
