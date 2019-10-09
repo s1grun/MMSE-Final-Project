@@ -2,6 +2,7 @@ import time
 import module.event as E
 import module.user as u
 import module.task as T
+import module.hrrequest as H
 from flask import Flask, render_template, request
 
 app = Flask(__name__, static_url_path='/static')
@@ -175,6 +176,62 @@ def submitTask():
         return {'res':'submit failed'}
 
     # return {'task':task}
+
+@app.route("/createHrRequest")
+def createHrRequest():
+    role = request.args.get("role")
+    desc = request.args.get("desc")
+    submitTo = request.args.get("submitTo")
+
+
+    newHrr = H.HrRequest(role, desc, int(time.time()))
+    if H.HrRequest.createHrRequest(newHrr,submitTo):
+        return 'HR Request created !'
+    else:
+        return 'fail to create !'
+
+@app.route("/viewHrRequest")
+def viewHrRequest():
+
+    hrrId = request.args.get("hrrId")
+
+
+    hrr = H.HrRequest.viewHrRequest(hrrId)
+
+    return {'task':hrr}
+
+@app.route("/updateHrRequest")
+def updateHrRequest():
+
+    hrrId = request.args.get("hrrId")
+    who = request.args.get("user")
+    #t = request.args.get("type")
+
+    res = H.HrRequest.updateHrRequest(hrrId, who)
+
+    if res == True:
+        return {'res': 'Successfully'}
+    else :
+        return {'res': 'failed'}
+
+@app.route("/submitHrRequest")
+def submitHrRequest():
+
+    to = request.args.get("to")
+    hrrId = request.args.get("hrrId")
+    cmt = request.args.get("comment")
+    F = request.args.get("from")
+    print('cmt',cmt)
+
+    # if cmt !='':
+    #     E.Event.submitTo(cmt, to)
+
+    res = H.HrRequest.submitTo(hrrId,to, F,cmt)
+
+    if res == True:
+        return {'res':'submit Successfully'}
+    else :
+        return {'res':'submit failed'}
 
 
 if __name__ == '__main__':
