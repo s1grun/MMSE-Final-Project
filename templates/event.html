@@ -426,7 +426,7 @@ function hideForm() {
             <ul>
         {% for hr in HRList %}
             {% if hr != ''%}
-            <a href="javascript:viewHiringRequest({{hr.split(' ')[0]}},'{{hr.split(' ')[1]}}')"><li>{{hr}}</li></a>
+            <a href="javascript:viewHiringRequest({{hr.split(' ')[0]}},'{{hr.split(' ')[1]}}')"><li>{{hr.split(' ')[0]}}</li></a>
             {% endif%}
         {% endfor%}
             </ul>
@@ -445,7 +445,7 @@ function hideForm() {
             <ul>
         {% for hr in budgetList %}
             {% if hr != ''%}
-            <a href="javascript:viewBudgetRequest({{hr.split(' ')[0]}},'{{hr.split(' ')[1]}}')"><li>{{hr}}</li></a>
+            <a href="javascript:viewBudgetRequest({{hr.split(' ')[0]}},'{{hr.split(' ')[1]}}')"><li>{{hr.split(' ')[0]}}</li></a>
             {% endif%}
         {% endfor%}
             </ul>
