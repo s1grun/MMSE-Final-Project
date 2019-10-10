@@ -28,6 +28,7 @@ def login():
     if username == 'SCSO':
         [views, username, usr] = u.SCSO.login(username, pw)
         eventList =usr.getEventList()
+
         return render_template('event.html', user=username, views=views, eventList=eventList)
     elif username == 'FM':
         [views, username, usr] = u.FM.login(username, pw)
@@ -37,6 +38,24 @@ def login():
         [views, username, usr] = u.FM.login(username, pw)
         eventList =usr.getEventList()
         return render_template('event.html', user=username, views=views, eventList=eventList)
+    elif username == 'SMPM':
+        [views, username, usr] = u.SMPM.login(username, pw)
+        taskList =usr.getTaskList()
+        HRList =usr.getHRList()
+        budgetList =usr.getBudgetList()
+        return render_template('event.html', user=username, views=views, taskList=taskList, HRList=HRList, budgetList=budgetList)
+    elif username == 'subTeam1':
+        [views, username, usr] = u.subTeam1.login(username, pw)
+        taskList =usr.getTaskList()
+        return render_template('event.html', user=username, views=views, taskList=taskList)
+    elif username == 'subTeam2':
+        [views, username, usr] = u.subTeam2.login(username, pw)
+        taskList =usr.getTaskList()
+        return render_template('event.html', user=username, views=views, taskList=taskList)
+    elif username == 'HR':
+        [views, username, usr] = u.subTeam2.login(username, pw)
+        HRList = usr.getHRList()
+        return render_template('event.html', user=username, views=views, HRList=HRList)
 
     [views, username, usr]=u.User.login(username,pw)
 
@@ -143,19 +162,19 @@ def viewTask():
 
     return {'task':task}
 
-@app.route("/updateTask")
-def updateTask():
-
-    tid = request.args.get("taskId")
-    who = request.args.get("user")
-    #t = request.args.get("type")
-
-    res = T.Task.updateTask(tid, who)
-
-    if res == True:
-        return {'res': 'Successfully'}
-    else :
-        return {'res': 'failed'}
+# @app.route("/updateTask")
+# def updateTask():
+#
+#     tid = request.args.get("taskId")
+#     who = request.args.get("user")
+#     #t = request.args.get("type")
+#
+#     res = T.Task.updateTask(tid, who)
+#
+#     if res == True:
+#         return {'res': 'Successfully'}
+#     else :
+#         return {'res': 'failed'}
 
 @app.route("/submitTask")
 def submitTask():
@@ -191,40 +210,43 @@ def createHrRequest():
     else:
         return 'fail to create !'
 
-@app.route("/viewHrRequest")
+@app.route("/viewHiringRequest")
 def viewHrRequest():
 
-    hrrId = request.args.get("hrrId")
+    hrrId = request.args.get("hrId")
 
 
     hrr = H.HrRequest.viewHrRequest(hrrId)
 
-    return {'HR Request':hrr}
+    return {'res':hrr}
 
-@app.route("/updateHrRequest")
-def updateHrRequest():
+# @app.route("/updateHR")
+# def updateHrRequest():
+#
+#     hrrId = request.args.get("hrId")
+#     who = request.args.get("user")
+#     t = request.args.get("type")
+#     to = request.args.get("to")
+#     cmt = request.args.get("cmt")
+#
+#     res = H.HrRequest.updateHrRequest(hrrId, who, t)
+#
+#     if res == True:
+#         return {'res': t + 'Successfully'}
+#     else :
+#         return {'res': t + 'failed'}
 
-    hrrId = request.args.get("hrrId")
-    who = request.args.get("user")
-    t = request.args.get("type")
-
-    res = H.HrRequest.updateHrRequest(hrrId, who, t)
-
-    if res == True:
-        return {'res': t + 'Successfully'}
-    else :
-        return {'res': t + 'failed'}
-
-@app.route("/submitHrRequest")
-def submitHrRequest():
+@app.route("/updateHR")
+def updateHR():
 
     to = request.args.get("to")
-    hrrId = request.args.get("hrrId")
-    cmt = request.args.get("comment")
-    F = request.args.get("from")
+    hrrId = request.args.get("hrId")
+    cmt = request.args.get("cmt")
+    F = request.args.get("user")
+    ty = request.args.get("type")
     print('cmt',cmt)
 
-    res = H.HrRequest.submitTo(hrrId,to, F,cmt)
+    res = H.HrRequest.submitTo(hrrId,to, ty, F, cmt)
 
     if res == True:
         return {'res':'submit Successfully'}

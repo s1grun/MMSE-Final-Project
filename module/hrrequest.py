@@ -14,6 +14,10 @@ class HrRequest:
         f.close()
 
         self.submitTo(fname, to)
+        f = open('./storage/SMPM_hr', 'a')
+        f.write(str(self.hrrId) + ' unread\n')
+        f.close()
+        return True
 
     @staticmethod
     def viewHrRequest(hrrId):
@@ -28,16 +32,23 @@ class HrRequest:
         return hrrequestArr
 
     @staticmethod
-    def submitTo(hrrId, to, From=None, cmt=None):
+    def submitTo(hrrId, to, ty, From=None, cmt=None):
+
+        if to == 'SMPM':
+            to = 'SMPM_hr'
 
         f = open('./storage/' + to, 'a')
         f.write(hrrId + ' unread\n')
         f.close()
 
         if cmt is not None and cmt != '':
-            f2 = open('./storage/event/' + hrrId, 'a')
+            f2 = open('./storage/hrr/' + hrrId, 'a')
             f2.write('comment ' + cmt + '\n')
             f2.close()
+
+        f2 = open('./storage/hrr/' + hrrId, 'a')
+        f2.write(ty + 'ed by ' + From + '\n')
+        f2.close()
 
         if From is not None:
             f = open('./storage/' + From, 'r+')

@@ -153,7 +153,7 @@ function hideForm() {
                 view.style.display = 'block';
                 // console.log(JSON.parse(JSON.stringify(response) ));
                 view.innerText = '';
-                response.event.map(function (item, index) {
+                response.task.map(function (item, index) {
                     console.log(item);
                     var li = document.createElement('div');
                     li.innerText = item;
@@ -162,15 +162,16 @@ function hideForm() {
                 if(type=='unread'){
 
 
-                        if('{{user}}' == 'subTeam'){
+                        if('{{user}}' == 'subTeam1'|'{{user}}' == 'subTeam2'){
                             view.innerHTML += `<textarea id="comment"></textarea><br/>`;
-                        }
-
-                             view.innerHTML += `<select name="submitTo" id="submitTo">
+                            view.innerHTML += `<select name="submitTo" id="submitTo">
 
                                             <option value="SMPM">SMPM</option>
                                         </select><br/>`
                             view.innerHTML += `<button onclick="submitTask(${taskId})" id="submit-btn">submit</button>`
+                        }
+
+
 
 
 
@@ -226,7 +227,7 @@ function hideForm() {
                 view.style.display = 'block';
                 // console.log(JSON.parse(JSON.stringify(response) ));
                 view.innerText = '';
-                response.event.map(function (item, index) {
+                response.res.map(function (item, index) {
                     console.log(item);
                     var li = document.createElement('div');
                     li.innerText = item;
@@ -266,7 +267,7 @@ function hideForm() {
         $.ajax({
                 type: "GET",
                 contentType: 'application/json',
-                url:  `/updateHR?hrId=${id}&user={{user}}&type=${t}&to=${to}&cmt=${cmt}`,
+                url:  `/updateHR?hrId=${id}&user={{user}}&type=${type}&to=${to}&cmt=${cmt}`,
                 dataType: "json",
                 error: function(){},
                 // data: jsn,
@@ -335,7 +336,7 @@ function hideForm() {
         $.ajax({
                 type: "GET",
                 contentType: 'application/json',
-                url:  `/updateBudgetRequest?brId=${id}&user={{user}}&type=${t}&to=${to}&cmt=${cmt}`,
+                url:  `/updateBudgetRequest?brId=${id}&user={{user}}&type=${type}&to=${to}&cmt=${cmt}`,
                 dataType: "json",
                 error: function(){},
                 // data: jsn,
@@ -400,13 +401,13 @@ function hideForm() {
 
     {% endif%}
 
-    {% if user == 'SMPM' or user == 'subTeam'%}
+    {% if user == 'SMPM' or user == 'subTeam1' or user == 'subTeam2'%}
         <div>
-            task list:{{taskList.length(}}
+            task list:{{taskList.length}}
             <ul>
         {% for tsk in taskList %}
             {% if tsk != ''%}
-            <a href="javascript:viewTask({{tsk.split(' ')[0]}},'{{tsk.split(' ')[1]}}')"><li>{{tsk}}</li></a>
+            <a href="javascript:viewTask({{tsk.split(' ')[0]}},'{{tsk.split(' ')[1]}}')"><li>{{tsk.split(' ')[0]}}</li></a>
             {% endif%}
         {% endfor%}
             </ul>
@@ -421,10 +422,10 @@ function hideForm() {
 
     {% if user == 'SMPM' or user == 'HR'%}
         <div>
-            Hiring request list: {{HRList.length()}}
+            Hiring request list: {{HRList.length}}
             <ul>
         {% for hr in HRList %}
-            {% if tsk != ''%}
+            {% if hr != ''%}
             <a href="javascript:viewHiringRequest({{hr.split(' ')[0]}},'{{hr.split(' ')[1]}}')"><li>{{hr}}</li></a>
             {% endif%}
         {% endfor%}
@@ -440,10 +441,10 @@ function hideForm() {
 
     {% if user == 'SMPM' or user == 'FM'%}
         <div>
-            budget request list: {{budgetList.length()}}
+            budget request list: {{budgetList.length}}
             <ul>
         {% for hr in budgetList %}
-            {% if tsk != ''%}
+            {% if hr != ''%}
             <a href="javascript:viewBudgetRequest({{hr.split(' ')[0]}},'{{hr.split(' ')[1]}}')"><li>{{hr}}</li></a>
             {% endif%}
         {% endfor%}
@@ -513,7 +514,8 @@ function hideForm() {
             <input type="number" name="budget"><br/>
             submitTo<br/>
             <select name="submitTo">
-                <option value="subTeam">subTeam</option>
+                <option value="subTeam1">subTeam1</option>
+                <option value="subTeam2">subTeam2</option>
             </select><br/>
             <!--eventId<br/>-->
             <!--<input type="text" value="time">-->
@@ -533,10 +535,10 @@ function hideForm() {
             role<br/>
             <input type="text" name="role"><br/>
             description<br/>
-            <input type="text" name="description"><br/>
+            <input type="text" name="desc"><br/>
             submitTo<br/>
             <select name="submitTo">
-                <option value="subTeam">HR</option>
+                <option value="HR">HR</option>
             </select><br/>
             <!--eventId<br/>-->
             <!--<input type="text" value="time">-->

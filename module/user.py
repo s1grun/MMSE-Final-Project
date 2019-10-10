@@ -12,7 +12,7 @@ class User:
         print(username)
         if username == 'SCSO':
             usr = SCSO(username, password)
-            print(usr)
+            # print(usr)
         elif username == 'CSO':
             usr = CSO(username, password)
         elif username == 'FM':
@@ -24,11 +24,14 @@ class User:
         elif username == 'SMPM':
             usr = SMPM(username, password)
 
-        elif username == 'subTeam':
-            usr = subTeam(username, password)
+        elif username == 'subTeam1':
+            usr = subTeam1(username, password)
+
+        elif username == 'subTeam2':
+            usr = subTeam2(username, password)
 
         elif username == 'HR':
-            usr = subTeam(username, password)
+            usr = HR(username, password)
 
 
         return [usr.getViewList(), username, usr]
@@ -98,11 +101,11 @@ class AM(User):
 class SMPM(User):
 
     def getViewList(self):
-        self.viewList = ['createTask', 'viewTask', 'createHiringRequest']
+        self.viewList = ['createTask', 'viewTask', 'createHiringRequest', 'createBudgetRequest']
         return self.viewList
     def getTaskList(self):
 
-        fname = str('SMPM')
+        fname = 'SMPM_task'
         f = open('./storage/' + fname, 'r')
         taskList = f.read()
         f.close()
@@ -110,20 +113,56 @@ class SMPM(User):
 
         return taskArr
 
-class subTeam(User):
+    def getHRList(self):
+        fname = 'SMPM_hr'
+        f = open('./storage/' + fname, 'r')
+        taskList = f.read()
+        f.close()
+        taskArr = taskList.split('\n')
+
+        return taskArr
+    def getBudgetList(self):
+        fname = 'SMPM_budget'
+        f = open('./storage/' + fname, 'r')
+        taskList = f.read()
+        f.close()
+        taskArr = taskList.split('\n')
+
+        return taskArr
+
+class subTeam1(User):
 
     def getViewList(self):
         self.viewList = ['viewTask']
         return self.viewList
     def getTaskList(self):
 
-        fname = str('subTeam')
+        fname = str('subTeam1')
+        f = open('./storage/' + fname, 'r')
+        taskList = f.read()
+        f.close()
+        # print(taskList)
+        taskArr = taskList.split('\n')
+
+        return taskArr
+
+class subTeam2(User):
+
+    def getViewList(self):
+        self.viewList = ['viewTask']
+        return self.viewList
+    def getTaskList(self):
+
+        fname = str('subTeam2')
         f = open('./storage/' + fname, 'r')
         taskList = f.read()
         f.close()
         taskArr = taskList.split('\n')
 
         return taskArr
+
+
+
 
 class HR(User):
 

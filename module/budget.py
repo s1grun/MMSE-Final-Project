@@ -16,6 +16,7 @@ class Budget:
         f.close()
 
         self.submitTo(fname, to)
+        self.submitTo(fname, 'SMPM')
 
     @staticmethod
     def viewBudget(budgetId):
