@@ -16,7 +16,7 @@ class Task:
         f.write('taskName: '+ self.taskName + '\n')
         f.write('eventName: '+ self.eventName + '\n')
         f.write('activity: '+ self.activity + '\n')
-        f.write('budget: '+ self.budget + '\n')
+        f.write('budget: '+ str(self.budget) + '\n')
         f.write('taskId: '+ str(self.taskId) + '\n')
         f.close()
 
