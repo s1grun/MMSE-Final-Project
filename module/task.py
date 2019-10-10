@@ -1,3 +1,6 @@
+from . import common
+
+
 class Task:
     def __init__(self, taskName, eventName, activity, budget, taskId):
         self.taskName = taskName
@@ -38,12 +41,39 @@ class Task:
 
         return taskArr
 
+
+
+
     @staticmethod
     def submitTo(taskId, to, From=None, cmt=None):
 
-        f = open('./storage/' + to+'_task', 'a')
-        f.write(taskId +' unread\n')
-        f.close()
+        if to == 'SMPM':
+            to = 'SMPM_task'
+
+        # f = open('./storage/' + to, 'a')
+        # f.write(taskId +' unread\n')
+        # f.close()
+        # f = open('./storage/' + From, 'r+')
+        # lines = f.read()
+        # lines = lines.split('\n')
+        # # print(lines)
+        # new_line_arr = []
+        # for line in lines:
+        #     print(str(line.split(' ')[0]))
+        #     if line.split(' ')[0] == taskId:
+        #         new_line_arr.append(taskId + ' unread\n')
+        #     else:
+        #         new_line_arr.append(line + '\n')
+        # f.close()
+        #
+        # f = open('./storage/' + From, 'w')
+        #
+        # newStr = ''.join(new_line_arr)
+        # f.write(newStr)
+        # # print(task)
+        # f.close()
+        common.updateFile(to, taskId, taskId + ' unread\n')
+
 
         if cmt is not None and cmt!='':
             f2 = open('./storage/task/' + taskId, 'a')

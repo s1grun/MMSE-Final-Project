@@ -1,3 +1,5 @@
+from . import common
+
 class HrRequest:
     def __init__(self, role, desc, hrrId):
         self.role = role
@@ -32,23 +34,24 @@ class HrRequest:
         return hrrequestArr
 
     @staticmethod
-    def submitTo(hrrId, to, ty, From=None, cmt=None):
+    def submitTo(hrrId, to, ty=None, From=None, cmt=None):
 
         if to == 'SMPM':
             to = 'SMPM_hr'
 
-        f = open('./storage/' + to, 'a')
-        f.write(hrrId + ' unread\n')
-        f.close()
+        # f = open('./storage/' + to, 'a')
+        # f.write(hrrId + ' unread\n')
+        # f.close()
+        common.updateFile(to, hrrId, hrrId + ' unread\n')
 
         if cmt is not None and cmt != '':
             f2 = open('./storage/hrr/' + hrrId, 'a')
             f2.write('comment ' + cmt + '\n')
             f2.close()
-
-        f2 = open('./storage/hrr/' + hrrId, 'a')
-        f2.write(ty + 'ed by ' + From + '\n')
-        f2.close()
+        if ty is not None:
+            f2 = open('./storage/hrr/' + hrrId, 'a')
+            f2.write(ty + 'ed by ' + From + '\n')
+            f2.close()
 
         if From is not None:
             f = open('./storage/' + From, 'r+')
@@ -68,6 +71,7 @@ class HrRequest:
 
             newStr = ''.join(new_line_arr)
             f.write(newStr)
+
             # print(event)
             f.close()
 

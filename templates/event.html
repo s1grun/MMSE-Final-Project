@@ -280,7 +280,7 @@ function hideForm() {
          })
     }
 
-    function viewBudgetRequest(id) {
+    function viewBudgetRequest(id,type) {
 
         hideForm();
         $('#budgetView').css('display','block');
@@ -297,7 +297,7 @@ function hideForm() {
                 view.style.display = 'block';
                 // console.log(JSON.parse(JSON.stringify(response) ));
                 view.innerText = '';
-                response.event.map(function (item, index) {
+                response.res.map(function (item, index) {
                     console.log(item);
                     var li = document.createElement('div');
                     li.innerText = item;
@@ -563,7 +563,7 @@ function hideForm() {
             <input type="text" name="activity"><br/>
             submitTo<br/>
             <select name="submitTo">
-                <option value="subTeam">FM</option>
+                <option value="FM">FM</option>
             </select><br/>
             <!--eventId<br/>-->
             <!--<input type="text" value="time">-->

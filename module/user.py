@@ -70,11 +70,21 @@ class CSO(User):
 class FM(User):
 
     def getViewList(self):
-        self.viewList = ['viewEvent']
+        self.viewList = ['viewEvent','viewBudget']
         return self.viewList
     def getEventList(self):
 
         fname = str('FM')
+        f = open('./storage/' + fname, 'r')
+        eventList = f.read()
+        f.close()
+        eventArr = eventList.split('\n')
+
+        return eventArr
+
+    def getBudgetList(self):
+
+        fname = 'FM_budget'
         f = open('./storage/' + fname, 'r')
         eventList = f.read()
         f.close()

@@ -1,3 +1,5 @@
+from . import common
+
 class Budget:
     def __init__(self, amount, eventName, activity, budgetId):
         self.amount = amount
@@ -16,7 +18,11 @@ class Budget:
         f.close()
 
         self.submitTo(fname, to)
-        self.submitTo(fname, 'SMPM')
+        f = open('./storage/SMPM_budget', 'a')
+        f.write(str(self.budgetId) + ' unread\n')
+        f.close()
+
+        return True
 
     @staticmethod
     def viewBudget(budgetId):
@@ -31,18 +37,33 @@ class Budget:
         return budgetArr
 
     @staticmethod
-    def submitTo(budgetId, to, From=None, cmt=None):
+    def submitTo(budgetId, to, ty=None, From=None, cmt=None):
 
-        f = open('./storage/' + to, 'a')
-        f.write(budgetId + ' unread\n')
-        f.close()
+        if to == 'SMPM':
+            to = 'SMPM_budget'
+        elif to == 'FM':
+            to = 'FM_budget'
+
+
+        # f = open('./storage/' + to, 'a')
+        # f.write(budgetId + ' unread\n')
+        # f.close()
+
+        common.updateFile(to, budgetId, budgetId + ' unread\n')
 
         if cmt is not None and cmt != '':
             f2 = open('./storage/budget/' + budgetId, 'a')
             f2.write('comment ' + cmt + '\n')
             f2.close()
 
+        if ty is not None:
+            f2 = open('./storage/budget/' + budgetId, 'a')
+            f2.write(ty + 'ed by ' + From + '\n')
+            f2.close()
+
+
         if From is not None:
+            From = From + '_budget'
             f = open('./storage/' + From, 'r+')
             lines = f.read()
             lines = lines.split('\n')
