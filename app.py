@@ -33,7 +33,8 @@ def login():
     elif username == 'FM':
         [views, username, usr] = u.FM.login(username, pw)
         eventList =usr.getEventList()
-        return render_template('event.html', user=username, views=views, eventList=eventList)
+        budgetList =usr.getBudgetList()
+        return render_template('event.html', user=username, views=views, eventList=eventList, budgetList=budgetList)
     elif username == 'AM':
         [views, username, usr] = u.FM.login(username, pw)
         eventList =usr.getEventList()
@@ -148,9 +149,9 @@ def createTask():
 
     newTask = T.Task(taskName, eventName, activity, budget, int(time.time()))
     if T.Task.createTask(newTask,submitTo):
-        return 'task created !'
+        return '<a href="javascript:window.history.go(-1)"><- back</a><br>task created !'
     else:
-        return 'fail to create !'
+        return '<a href="javascript:window.history.go(-1)"><- back</a><br>fail to create !'
 
 @app.route("/viewTask")
 def viewTask():
@@ -206,9 +207,9 @@ def createHrRequest():
 
     newHrr = H.HrRequest(role, desc, int(time.time()))
     if H.HrRequest.createHrRequest(newHrr,submitTo):
-        return 'HR Request created !'
+        return '<a href="javascript:window.history.go(-1)"><- back</a><br>HR Request created !'
     else:
-        return 'fail to create !'
+        return '<a href="javascript:window.history.go(-1)"><- back</a><br>fail to create !'
 
 @app.route("/viewHiringRequest")
 def viewHrRequest():
@@ -253,7 +254,7 @@ def updateHR():
     else :
         return {'res':'submit failed'}
 
-@app.route("/createBudget")
+@app.route("/createBudgetRequest")
 def createBudget():
     amount = request.args.get("amount")
     eventName = request.args.get("eventName")
@@ -263,46 +264,47 @@ def createBudget():
 
     newBudget = B.Budget(amount, eventName, activity, int(time.time()))
     if B.Budget.createBudget(newBudget,submitTo):
-        return 'Budget Request created !'
+        return '<a href="javascript:window.history.go(-1)"><- back</a><br> Budget Request created !'
     else:
-        return 'fail to create !'
+        return '<a href="javascript:window.history.go(-1)"><- back</a><br> fail to create !'
 
-@app.route("/viewBudget")
+@app.route("/viewBudgetRequest")
 def viewBudget():
 
-    budgetId = request.args.get("budgetId")
+    budgetId = request.args.get("brId")
 
 
     budget = B.Budget.viewBudget(budgetId)
 
-    return {'Budget':budget}
+    return {'res':budget}
 
-@app.route("/updateBudget")
-def updateBudget():
+# @app.route("/updateBudgetRequest")
+# def updateBudget():
+#
+#     budgetId = request.args.get("brtId")
+#     who = request.args.get("user")
+#     t = request.args.get("type")
+#
+#     res = B.Budget.updateBudget(budgetId,who,t)
+#
+#     if res == True:
+#         return {'res':t+' Successfully'}
+#     else :
+#         return {'res':t+' failed'}
+#
+#     # return {'budget':budget}
 
-    budgetId = request.args.get("budgetId")
-    who = request.args.get("user")
-    t = request.args.get("type")
-
-    res = B.Budget.updateBudget(budgetId,who,t)
-
-    if res == True:
-        return {'res':t+' Successfully'}
-    else :
-        return {'res':t+' failed'}
-
-    # return {'budget':budget}
-
-@app.route("/submitBudget")
-def submitBudget():
+@app.route("/updateBudgetRequest")
+def updateBudgetRequest():
 
     to = request.args.get("to")
-    budgetId = request.args.get("budgetId")
-    cmt = request.args.get("comment")
-    F = request.args.get("from")
+    budgetId = request.args.get("brId")
+    cmt = request.args.get("cmt")
+    F = request.args.get("user")
+    ty = request.args.get("type")
     print('cmt',cmt)
 
-    res = B.Budget.submitTo(budgetId,to, F,cmt)
+    res = B.Budget.submitTo(budgetId,to, ty, F, cmt)
 
     if res == True:
         return {'res':'submit Successfully'}
