@@ -18,6 +18,8 @@ class Task:
         f.close()
 
         self.submitTo(fname, to)
+        return True
+
 
     @staticmethod
     def viewTask(taskId):

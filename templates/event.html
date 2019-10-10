@@ -16,11 +16,16 @@ function hideForm() {
     $('#form1').css('display','none');
         $('#form2').css('display','none');
         $('#form3').css('display','none');
+        $('#form4').css('display','none');
+        $('#taskView').css('display','none');
+        $('#HRView').css('display','none');
+        $('#budgetView').css('display','none');
+        $('#eventView').css('display','none');
 }
 
 // forgot to inform scso
     function openForm(t) {
-        $('#taskView').css('display','none');
+
         hideForm();
         document.getElementById('form'+t).style.display = 'block'
     }
@@ -205,19 +210,19 @@ function hideForm() {
     // function createHiringRequest(){
     //
     // }
-    function viewHiringRequest(taskId, type) {
+    function viewHiringRequest(HrId, type) {
         hideForm();
-        $('#taskView').css('display','block');
+        $('#HRView').css('display','block');
         $.ajax({
             type: "GET",
             contentType: 'application/json',
-            url: `/viewTask?taskId=${taskId}`,
+            url: `/viewHiringRequest?hrId=${HrId}`,
             dataType: "json",
             error: function () {
             },
             // data: jsn,
             success: function (response) {
-                var view = document.getElementById('taskView');
+                var view = document.getElementById('HRView');
                 view.style.display = 'block';
                 // console.log(JSON.parse(JSON.stringify(response) ));
                 view.innerText = '';
@@ -230,15 +235,20 @@ function hideForm() {
                 if(type=='unread'){
 
 
-                        if('{{user}}' == 'subTeam'){
+                        if('{{user}}' == 'HR'){
                             view.innerHTML += `<textarea id="comment"></textarea><br/>`;
-                        }
-
-                             view.innerHTML += `<select name="submitTo" id="submitTo">
+                            view.innerHTML += `<select name="submitTo" id="submitTo">
 
                                             <option value="SMPM">SMPM</option>
                                         </select><br/>`
-                            view.innerHTML += `<button onclick="submitTask(${taskId})" id="submit-btn">submit</button>`
+                            view.innerHTML += `<button onclick="updateHR('approve',${HrId})" id="approve-btn">approve</button><br/>`;
+                            view.innerHTML += `<button onclick="updateHR('reject',${HrId})" id="reject-btn">reject</button><br/>`;
+
+
+                            // view.innerHTML += `<button onclick="submitTask(${HrId})" id="submit-btn">submit</button>`
+
+                        }
+
 
 
 
@@ -250,6 +260,93 @@ function hideForm() {
 
     }
 
+    function updateHR(type, id) {
+        var to = document.getElementById('submitTo').value;
+        var cmt = document.getElementById('comment').value;
+        $.ajax({
+                type: "GET",
+                contentType: 'application/json',
+                url:  `/updateHR?hrId=${id}&user={{user}}&type=${t}&to=${to}&cmt=${cmt}`,
+                dataType: "json",
+                error: function(){},
+                // data: jsn,
+                success:function(response){
+                    var view = document.getElementById('HRView');
+                    view.innerHTML += response.res;
+                    hide()
+
+                }
+         })
+    }
+
+    function viewBudgetRequest(id) {
+
+        hideForm();
+        $('#budgetView').css('display','block');
+        $.ajax({
+            type: "GET",
+            contentType: 'application/json',
+            url: `/viewBudgetRequest?brId=${id}`,
+            dataType: "json",
+            error: function () {
+            },
+            // data: jsn,
+            success: function (response) {
+                var view = document.getElementById('budgetView');
+                view.style.display = 'block';
+                // console.log(JSON.parse(JSON.stringify(response) ));
+                view.innerText = '';
+                response.event.map(function (item, index) {
+                    console.log(item);
+                    var li = document.createElement('div');
+                    li.innerText = item;
+                    view.append(li);
+                });
+                if(type=='unread'){
+
+
+                        if('{{user}}' == 'FM'){
+                            view.innerHTML += `<textarea id="comment"></textarea><br/>`;
+                            view.innerHTML += `<select name="submitTo" id="submitTo">
+
+                                            <option value="SMPM">SMPM</option>
+                                        </select><br/>`
+                            view.innerHTML += `<button onclick="updateBudget('approve',${id})" id="approve-btn">approve</button><br/>`;
+                            view.innerHTML += `<button onclick="updateBudget('reject',${id})" id="reject-btn">reject</button><br/>`;
+
+
+                            // view.innerHTML += `<button onclick="submitTask(${HrId})" id="submit-btn">submit</button>`
+
+                        }
+
+
+
+
+                    }
+
+
+            }
+        })
+    }
+
+    function updateBudget(type,id) {
+        var to = document.getElementById('submitTo').value;
+        var cmt = document.getElementById('comment').value;
+        $.ajax({
+                type: "GET",
+                contentType: 'application/json',
+                url:  `/updateBudgetRequest?brId=${id}&user={{user}}&type=${t}&to=${to}&cmt=${cmt}`,
+                dataType: "json",
+                error: function(){},
+                // data: jsn,
+                success:function(response){
+                    var view = document.getElementById('budgetView');
+                    view.innerHTML += response.res;
+                    hide()
+
+                }
+         })
+    }
 
 
 
@@ -272,6 +369,10 @@ function hideForm() {
         <button id='createHiringRequest' onclick="openForm(3)" >{{btn}}</button>
     {% endif%}
 
+    {% if btn == 'createBudgetRequest'%}
+        <button id='createBudgetRequest' onclick="openForm(4)" >{{btn}}</button>
+    {% endif%}
+
     <!--{% if btn == 'viewHiringRequest'%}-->
         <!--<button id='viewHiringRequest' onclick="openForm(3)" >{{btn}}</button>-->
     <!--{% endif%}-->
@@ -282,7 +383,7 @@ function hideForm() {
 
     {% if user == 'SCSO' or user == 'FM' or user =='AM'%}
         <div>
-            event view:
+            event view: {{eventList.length}}
             <ul>
         {% for e in eventList %}
             {% if e != ''%}
@@ -301,7 +402,7 @@ function hideForm() {
 
     {% if user == 'SMPM' or user == 'subTeam'%}
         <div>
-            task view:
+            task list:{{taskList.length(}}
             <ul>
         {% for tsk in taskList %}
             {% if tsk != ''%}
@@ -311,6 +412,44 @@ function hideForm() {
             </ul>
 
              <div id="taskView">
+
+
+            </div>
+        </div>
+
+    {% endif%}
+
+    {% if user == 'SMPM' or user == 'HR'%}
+        <div>
+            Hiring request list: {{HRList.length()}}
+            <ul>
+        {% for hr in HRList %}
+            {% if tsk != ''%}
+            <a href="javascript:viewHiringRequest({{hr.split(' ')[0]}},'{{hr.split(' ')[1]}}')"><li>{{hr}}</li></a>
+            {% endif%}
+        {% endfor%}
+            </ul>
+
+             <div id="HRView">
+
+
+            </div>
+        </div>
+
+    {% endif%}
+
+    {% if user == 'SMPM' or user == 'FM'%}
+        <div>
+            budget request list: {{budgetList.length()}}
+            <ul>
+        {% for hr in budgetList %}
+            {% if tsk != ''%}
+            <a href="javascript:viewBudgetRequest({{hr.split(' ')[0]}},'{{hr.split(' ')[1]}}')"><li>{{hr}}</li></a>
+            {% endif%}
+        {% endfor%}
+            </ul>
+
+             <div id="budgetView">
 
 
             </div>
@@ -383,7 +522,53 @@ function hideForm() {
 
     </div>
 
+    <div id="form3" style="display: none">
+        <form id="hiringForm" action="/createHrRequest">
+            <!--clientName<br/>-->
+            <!--<select name="clientName">-->
+                <!--<option value="A">A</option>-->
+                <!--<option value="B">B</option>-->
+                <!--<option value="C">C</option>-->
+            <!--</select><br/>-->
+            role<br/>
+            <input type="text" name="role"><br/>
+            description<br/>
+            <input type="text" name="description"><br/>
+            submitTo<br/>
+            <select name="submitTo">
+                <option value="subTeam">HR</option>
+            </select><br/>
+            <!--eventId<br/>-->
+            <!--<input type="text" value="time">-->
+            <input type="submit" value="Submit">
+        </form>
 
+    </div>
+
+    <div id="form4" style="display: none">
+        <form id="budgetForm" action="/createBudgetRequest">
+            <!--clientName<br/>-->
+            <!--<select name="clientName">-->
+                <!--<option value="A">A</option>-->
+                <!--<option value="B">B</option>-->
+                <!--<option value="C">C</option>-->
+            <!--</select><br/>-->
+            amount<br/>
+            <input type="number" name="amount"><br/>
+            eventName<br/>
+            <input type="text" name="eventName"><br/>
+            activity<br/>
+            <input type="text" name="activity"><br/>
+            submitTo<br/>
+            <select name="submitTo">
+                <option value="subTeam">FM</option>
+            </select><br/>
+            <!--eventId<br/>-->
+            <!--<input type="text" value="time">-->
+            <input type="submit" value="Submit">
+        </form>
+
+    </div>
 
 
 

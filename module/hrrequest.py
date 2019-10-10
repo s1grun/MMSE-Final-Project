@@ -2,7 +2,7 @@ class HrRequest:
     def __init__(self, role, desc, hrrId):
         self.role = role
         self. desc = desc
-        self.budgetId = budgetId
+        self.hrrId = hrrId
 
     def createHrRequest(self, to):
         fname = str(self.hrrId)
