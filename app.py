@@ -3,6 +3,7 @@ import module.event as E
 import module.user as u
 import module.task as T
 import module.hrrequest as H
+import module.budget as B
 from flask import Flask, render_template, request
 
 app = Flask(__name__, static_url_path='/static')
@@ -198,21 +199,21 @@ def viewHrRequest():
 
     hrr = H.HrRequest.viewHrRequest(hrrId)
 
-    return {'task':hrr}
+    return {'HR Request':hrr}
 
 @app.route("/updateHrRequest")
 def updateHrRequest():
 
     hrrId = request.args.get("hrrId")
     who = request.args.get("user")
-    #t = request.args.get("type")
+    t = request.args.get("type")
 
-    res = H.HrRequest.updateHrRequest(hrrId, who)
+    res = H.HrRequest.updateHrRequest(hrrId, who, t)
 
     if res == True:
-        return {'res': 'Successfully'}
+        return {'res': t + 'Successfully'}
     else :
-        return {'res': 'failed'}
+        return {'res': t + 'failed'}
 
 @app.route("/submitHrRequest")
 def submitHrRequest():
@@ -223,9 +224,6 @@ def submitHrRequest():
     F = request.args.get("from")
     print('cmt',cmt)
 
-    # if cmt !='':
-    #     E.Event.submitTo(cmt, to)
-
     res = H.HrRequest.submitTo(hrrId,to, F,cmt)
 
     if res == True:
@@ -233,6 +231,63 @@ def submitHrRequest():
     else :
         return {'res':'submit failed'}
 
+@app.route("/createBudget")
+def createBudget():
+    amount = request.args.get("amount")
+    eventName = request.args.get("eventName")
+    activity = request.args.get("activity")
+    submitTo = request.args.get("submitTo")
+
+
+    newBudget = B.Budget(amount, eventName, activity, int(time.time()))
+    if B.Budget.createBudget(newBudget,submitTo):
+        return 'Budget Request created !'
+    else:
+        return 'fail to create !'
+
+@app.route("/viewBudget")
+def viewBudget():
+
+    budgetId = request.args.get("budgetId")
+
+
+    budget = B.Budget.viewBudget(budgetId)
+
+    return {'Budget':budget}
+
+@app.route("/updateBudget")
+def updateBudget():
+
+    budgetId = request.args.get("budgetId")
+    who = request.args.get("user")
+    t = request.args.get("type")
+
+    res = B.Budget.updateBudget(budgetId,who,t)
+
+    if res == True:
+        return {'res':t+' Successfully'}
+    else :
+        return {'res':t+' failed'}
+
+    # return {'budget':budget}
+
+@app.route("/submitBudget")
+def submitBudget():
+
+    to = request.args.get("to")
+    budgetId = request.args.get("budgetId")
+    cmt = request.args.get("comment")
+    F = request.args.get("from")
+    print('cmt',cmt)
+
+    res = B.Budget.submitTo(budgetId,to, F,cmt)
+
+    if res == True:
+        return {'res':'submit Successfully'}
+    else :
+        return {'res':'submit failed'}
+
+    # return {'event':event}
 
 if __name__ == '__main__':
     app.run()
