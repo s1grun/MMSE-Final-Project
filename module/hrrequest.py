@@ -10,16 +10,20 @@ class HrRequest:
         fname = str(self.hrrId)
 
         f = open('./storage/hrr/'+fname, 'w')
-        f.write('role: '+ self.role + '\n')
-        f.write('desc: '+ self.desc + '\n')
-        f.write('hrrId: '+ str(self.hrrId) + '\n')
-        f.close()
+        if self.role != '' and self.desc != '':
+            f.write('role: '+ self.role + '\n')
+            f.write('desc: '+ self.desc + '\n')
+            f.write('hrrId: '+ str(self.hrrId) + '\n')
+            f.close()
 
-        self.submitTo(fname, to)
-        f = open('./storage/SMPM_hr', 'a')
-        f.write(str(self.hrrId) + ' unread\n')
-        f.close()
-        return True
+            self.submitTo(fname, to)
+            f = open('./storage/SMPM_hr', 'a')
+            f.write(str(self.hrrId) + ' unread\n')
+            f.close()
+            return True
+        else:
+            return False
+
 
     @staticmethod
     def viewHrRequest(hrrId):

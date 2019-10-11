@@ -13,20 +13,24 @@ class Task:
         fname = str(self.taskId)
 
         f = open('./storage/task/'+fname, 'w')
-        f.write('taskName: '+ self.taskName + '\n')
-        f.write('eventName: '+ self.eventName + '\n')
-        f.write('activity: '+ self.activity + '\n')
-        f.write('budget: '+ str(self.budget) + '\n')
-        f.write('taskId: '+ str(self.taskId) + '\n')
-        f.close()
 
-        self.submitTo(fname, to)
+        if self.budget > 0:
+            f.write('taskName: '+ self.taskName + '\n')
+            f.write('eventName: '+ self.eventName + '\n')
+            f.write('activity: '+ self.activity + '\n')
+            f.write('budget: '+ str(self.budget) + '\n')
+            f.write('taskId: '+ str(self.taskId) + '\n')
+            f.close()
 
-        f = open('./storage/SMPM_task', 'a')
-        f.write(str(self.taskId) + ' unread\n')
-        f.close()
+            self.submitTo(fname, to)
 
-        return True
+            f = open('./storage/SMPM_task', 'a')
+            f.write(str(self.taskId) + ' unread\n')
+            f.close()
+
+            return True
+        else:
+            return False
 
 
     @staticmethod
