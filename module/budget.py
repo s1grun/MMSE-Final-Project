@@ -48,11 +48,6 @@ class Budget:
         elif to == 'FM':
             to = 'FM_budget'
 
-
-        # f = open('./storage/' + to, 'a')
-        # f.write(budgetId + ' unread\n')
-        # f.close()
-
         common.updateFile(to, budgetId, budgetId + ' unread\n')
 
         if cmt is not None and cmt != '':

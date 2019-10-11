@@ -15,9 +15,14 @@ class TestBudget(unittest.TestCase):
         self.assertFalse(b2.createBudget('FM'))
 
     #
-    def test_viewTask(self):
+    def test_viewBudget(self):
 
-        self.assertEqual(B.Budget.viewBudget(self.id1),'taskName: Test Task eventName: Test Event activity:Food budget:34 taskId:1570619530')
+        self.assertEqual(B.Budget.viewBudget(1570791541),['amount: 345345',
+ 'eventName: Test Event',
+ 'activity: Food',
+ 'budgetId: 1570791541',
+ 'rejected by FM',
+ ''])
 
 
 

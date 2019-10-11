@@ -43,9 +43,6 @@ class HrRequest:
         if to == 'SMPM':
             to = 'SMPM_hr'
 
-        # f = open('./storage/' + to, 'a')
-        # f.write(hrrId + ' unread\n')
-        # f.close()
         common.updateFile(to, hrrId, hrrId + ' unread\n')
 
         if cmt is not None and cmt != '':
@@ -81,32 +78,3 @@ class HrRequest:
 
         return True
 
-    # @staticmethod
-    # def updateHrRequest(hrrId, who, t):
-    #
-    #     # fname = str(eventId)
-    #     f = open('./storage/' + who, 'r+')
-    #     lines = f.read()
-    #     lines = lines.split('\n')
-    #     print(lines)
-    #     new_line_arr = []
-    #     for line in lines:
-    #         print(str(line.split(' ')[0]))
-    #         if line.split(' ')[0] == hrrId:
-    #             new_line_arr.append(hrrId + ' read\n')
-    #         else:
-    #             new_line_arr.append(line + '\n')
-    #     f.close()
-    #
-    #     f = open('./storage/' + who, 'w')
-    #
-    #     newStr = ''.join(new_line_arr)
-    #     f.write(newStr)
-    #     # print(event)
-    #     f.close()
-    #
-    #     f2 = open('./storage/event/' + hrrId, 'a')
-    #     f2.write(t + 'ed by ' + who + '\n')
-    #     f2.close()
-    #
-    #     return True

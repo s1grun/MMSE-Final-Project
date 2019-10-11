@@ -9,11 +9,6 @@ from flask import Flask, render_template, request
 app = Flask(__name__, static_url_path='/static')
 
 
-# @app.route('/')
-# def hello_world():
-#     # name = request.args.get("name", "World")
-#     return 'Hello World!'
-
 @app.route("/")
 def index():
     return render_template('login.html')
@@ -66,7 +61,6 @@ def login():
 
 
 
-
 @app.route("/createEvent")
 def createEvent():
     clientName = request.args.get("clientName")
@@ -94,10 +88,6 @@ def viewEvent():
     event = E.Event.viewEvent(eid)
 
     return {'event':event}
-    # if E.Event.createEvent(newEvent,submitTo):
-    #     return 'event created !'
-    # else:
-    #     return 'fail to create !'
 
 
 @app.route("/updateEvent")
@@ -125,9 +115,6 @@ def submitEvent():
     cmt = request.args.get("comment")
     F = request.args.get("from")
     print('cmt',cmt)
-
-    # if cmt !='':
-    #     E.Event.submitTo(cmt, to)
 
     res = E.Event.submitTo(eid,to, F,cmt)
 
@@ -163,19 +150,6 @@ def viewTask():
 
     return {'task':task}
 
-# @app.route("/updateTask")
-# def updateTask():
-#
-#     tid = request.args.get("taskId")
-#     who = request.args.get("user")
-#     #t = request.args.get("type")
-#
-#     res = T.Task.updateTask(tid, who)
-#
-#     if res == True:
-#         return {'res': 'Successfully'}
-#     else :
-#         return {'res': 'failed'}
 
 @app.route("/submitTask")
 def submitTask():
@@ -221,22 +195,6 @@ def viewHrRequest():
 
     return {'res':hrr}
 
-# @app.route("/updateHR")
-# def updateHrRequest():
-#
-#     hrrId = request.args.get("hrId")
-#     who = request.args.get("user")
-#     t = request.args.get("type")
-#     to = request.args.get("to")
-#     cmt = request.args.get("cmt")
-#
-#     res = H.HrRequest.updateHrRequest(hrrId, who, t)
-#
-#     if res == True:
-#         return {'res': t + 'Successfully'}
-#     else :
-#         return {'res': t + 'failed'}
-
 @app.route("/updateHR")
 def updateHR():
 
@@ -278,21 +236,6 @@ def viewBudget():
 
     return {'res':budget}
 
-# @app.route("/updateBudgetRequest")
-# def updateBudget():
-#
-#     budgetId = request.args.get("brtId")
-#     who = request.args.get("user")
-#     t = request.args.get("type")
-#
-#     res = B.Budget.updateBudget(budgetId,who,t)
-#
-#     if res == True:
-#         return {'res':t+' Successfully'}
-#     else :
-#         return {'res':t+' failed'}
-#
-#     # return {'budget':budget}
 
 @app.route("/updateBudgetRequest")
 def updateBudgetRequest():

@@ -1,7 +1,14 @@
 # MMSE-Final-Project
 Swedish Events Planners SEP
 
+## Installation
+Install python 3.6  
+Install Flask latest version
 
+
+##Run the system
+Open the command line tool and type in python app.py.  
+Then open the localhost in your browser. 
 
 
 ## Event class
