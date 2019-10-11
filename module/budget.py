@@ -8,19 +8,23 @@ class Budget:
         self.budgetId = budgetId
 
     def createBudget(self, to):
-        fname = str(self.budgetId)
 
-        f = open('./storage/budget/'+fname, 'w')
-        f.write('amount: '+ self.amount + '\n')
-        f.write('eventName: '+ self.eventName + '\n')
-        f.write('activity: '+ self.activity + '\n')
-        f.write('budgetId: '+ str(self.budgetId) + '\n')
-        f.close()
+        if int(self.amount)<=0:
+            return False
+        else:
+            fname = str(self.budgetId)
 
-        self.submitTo(fname, to)
-        f = open('./storage/SMPM_budget', 'a')
-        f.write(str(self.budgetId) + ' unread\n')
-        f.close()
+            f = open('./storage/budget/'+fname, 'w')
+            f.write('amount: '+ self.amount + '\n')
+            f.write('eventName: '+ self.eventName + '\n')
+            f.write('activity: '+ self.activity + '\n')
+            f.write('budgetId: '+ str(self.budgetId) + '\n')
+            f.close()
+
+            self.submitTo(fname, to)
+            f = open('./storage/SMPM_budget', 'a')
+            f.write(str(self.budgetId) + ' unread\n')
+            f.close()
 
         return True
 
