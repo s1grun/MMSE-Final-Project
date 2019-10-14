@@ -15,7 +15,7 @@ class TestEvent(unittest.TestCase):
     #
     def test_viewEvent(self):
 
-        self.assertEqual(E.Event.viewEvent('1570533529'),['clientName: A',
+        self.assertEqual(E.Event.viewEvent('1570196545'),['clientName: A',
  'eventName: test',
  'startDate: 2019-10-23',
  'endDate: 2019-10-24',
@@ -23,6 +23,10 @@ class TestEvent(unittest.TestCase):
  'eventId: 1570533529',
  'reject by SCSO',
  ''])
+
+    def test_submit(self):
+        self.assertTrue(E.Event.submitTo('1570196545','SCSO'))
+        self.assertFalse(E.Event.submitTo('1570196546','SCSO'))
 
 
 

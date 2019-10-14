@@ -1,4 +1,5 @@
 from . import common
+import os.path
 
 class Budget:
     def __init__(self, amount, eventName, activity, budgetId):
@@ -30,60 +31,66 @@ class Budget:
 
     @staticmethod
     def viewBudget(budgetId):
-
         fname = str(budgetId)
-        f = open('./storage/budget/' + fname, 'r')
-        budget = f.read()
-        # print(budget)
-        f.close()
-        budgetArr = budget.split('\n')
+        if os.path.isfile('./storage/budget/' + fname):
 
-        return budgetArr
+            f = open('./storage/budget/' + fname, 'r')
+            budget = f.read()
+            # print(budget)
+            f.close()
+            budgetArr = budget.split('\n')
+
+            return budgetArr
+        else:
+            return ['not found']
 
     @staticmethod
     def submitTo(budgetId, to, ty=None, From=None, cmt=None):
 
-        if to == 'SMPM':
-            to = 'SMPM_budget'
-        elif to == 'FM':
-            to = 'FM_budget'
+        if os.path.isfile('./storage/budget/' + budgetId):
+            if to == 'SMPM':
+                to = 'SMPM_budget'
+            elif to == 'FM':
+                to = 'FM_budget'
 
-        common.updateFile(to, budgetId, budgetId + ' unread\n')
+            common.updateFile(to, budgetId, budgetId + ' unread\n')
 
-        if cmt is not None and cmt != '':
-            f2 = open('./storage/budget/' + budgetId, 'a')
-            f2.write('comment ' + cmt + '\n')
-            f2.close()
+            if cmt is not None and cmt != '':
+                f2 = open('./storage/budget/' + budgetId, 'a')
+                f2.write('comment ' + cmt + '\n')
+                f2.close()
 
-        if ty is not None:
-            f2 = open('./storage/budget/' + budgetId, 'a')
-            f2.write(ty + 'ed by ' + From + '\n')
-            f2.close()
+            if ty is not None:
+                f2 = open('./storage/budget/' + budgetId, 'a')
+                f2.write(ty + 'ed by ' + From + '\n')
+                f2.close()
 
 
-        if From is not None:
-            From = From + '_budget'
-            f = open('./storage/' + From, 'r+')
-            lines = f.read()
-            lines = lines.split('\n')
-            # print(lines)
-            new_line_arr = []
-            for line in lines:
-                print(str(line.split(' ')[0]))
-                if line.split(' ')[0] == budgetId:
-                    new_line_arr.append(budgetId + ' read\n')
-                else:
-                    new_line_arr.append(line + '\n')
-            f.close()
+            if From is not None:
+                From = From + '_budget'
+                f = open('./storage/' + From, 'r+')
+                lines = f.read()
+                lines = lines.split('\n')
+                # print(lines)
+                new_line_arr = []
+                for line in lines:
+                    print(str(line.split(' ')[0]))
+                    if line.split(' ')[0] == budgetId:
+                        new_line_arr.append(budgetId + ' read\n')
+                    else:
+                        new_line_arr.append(line + '\n')
+                f.close()
 
-            f = open('./storage/' + From, 'w')
+                f = open('./storage/' + From, 'w')
 
-            newStr = ''.join(new_line_arr)
-            f.write(newStr)
-            # print(budget)
-            f.close()
+                newStr = ''.join(new_line_arr)
+                f.write(newStr)
+                # print(budget)
+                f.close()
 
-        return True
+            return True
+        else:
+            return False
 
     @staticmethod
     def updateBudget(budgetId, who, t):

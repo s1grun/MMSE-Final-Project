@@ -20,6 +20,9 @@ class Testhrrequest(unittest.TestCase):
         'hrrId: 1570792395',
         ''])
 
+    def test_submit(self):
+        self.assertTrue(H.HrRequest.submitTo('1570697825','HR'))
+        self.assertFalse(H.HrRequest.submitTo('1570196546','HR'))
 
 
 

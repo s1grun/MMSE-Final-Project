@@ -52,12 +52,14 @@ def login():
         [views, username, usr] = u.subTeam2.login(username, pw)
         HRList = usr.getHRList()
         return render_template('event.html', user=username, views=views, HRList=HRList)
+    elif username == 'CSO':
+        [views, username, usr]=u.User.login(username,pw)
 
-    [views, username, usr]=u.User.login(username,pw)
+        # if user == 'SCSO':
 
-    # if user == 'SCSO':
-
-    return render_template('event.html', user=username, views=views)
+        return render_template('event.html', user=username, views=views)
+    else:
+        return 'login failed'
 
 
 

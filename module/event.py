@@ -1,6 +1,7 @@
 
 
 
+import os.path
 
 
 
@@ -39,48 +40,55 @@ class Event:
     @staticmethod
     def viewEvent(eventId):
 
-        fname = str(eventId)
-        f = open('./storage/event/' + fname, 'r')
-        event = f.read()
-        # print(event)
-        f.close()
-        eventArr = event.split('\n')
 
-        return eventArr
+        fname = str(eventId)
+        if os.path.isfile('./storage/event/' + fname):
+            f = open('./storage/event/' + fname, 'r')
+            event = f.read()
+            # print(event)
+            f.close()
+            eventArr = event.split('\n')
+
+            return eventArr
+        else:
+            return ['file not found']
     @staticmethod
     def submitTo(eventId, to, From=None, cmt=None):
 
-        f = open('./storage/' + to, 'a')
-        f.write(eventId+' unread\n')
-        f.close()
-
-        if cmt is not None and cmt!='':
-            f2 = open('./storage/event/' + eventId, 'a')
-            f2.write('comment ' + cmt + '\n')
-            f2.close()
-
-        if From is not None:
-            f = open('./storage/' + From, 'r+')
-            lines = f.read()
-            lines = lines.split('\n')
-            # print(lines)
-            new_line_arr = []
-            for line in lines:
-                print(str(line.split(' ')[0]))
-                if line.split(' ')[0] == eventId:
-                    new_line_arr.append(eventId + ' read\n')
-                else:
-                    new_line_arr.append(line + '\n')
+        if os.path.isfile('./storage/event/' + eventId):
+            f = open('./storage/' + to, 'a')
+            f.write(eventId+' unread\n')
             f.close()
 
-            f = open('./storage/' + From, 'w')
+            if cmt is not None and cmt!='':
+                f2 = open('./storage/event/' + eventId, 'a')
+                f2.write('comment ' + cmt + '\n')
+                f2.close()
 
-            newStr = ''.join(new_line_arr)
-            f.write(newStr)
-            # print(event)
-            f.close()
+            if From is not None:
+                f = open('./storage/' + From, 'r+')
+                lines = f.read()
+                lines = lines.split('\n')
+                # print(lines)
+                new_line_arr = []
+                for line in lines:
+                    print(str(line.split(' ')[0]))
+                    if line.split(' ')[0] == eventId:
+                        new_line_arr.append(eventId + ' read\n')
+                    else:
+                        new_line_arr.append(line + '\n')
+                f.close()
 
-        return True
+                f = open('./storage/' + From, 'w')
+
+                newStr = ''.join(new_line_arr)
+                f.write(newStr)
+                # print(event)
+                f.close()
+
+            return True
+        else:
+            return False
 
     @staticmethod
     def updateEvent(eventId, who, t):

@@ -23,7 +23,9 @@ class TestTask(unittest.TestCase):
         ''])
 
 
-
+    def test_submit(self):
+        self.assertTrue(T.Task.submitTo('1570719547','subTeam1'))
+        self.assertFalse(T.Task.submitTo('1570196546','subTeam1'))
 
 
 if __name__ == '__main__':

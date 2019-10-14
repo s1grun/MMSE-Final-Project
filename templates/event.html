@@ -77,6 +77,9 @@ function hideForm() {
 
 
                     }
+                    if ($('#eventView').text().indexOf('not found')>0){
+                           hide();
+                       }
 
 
                 }
@@ -159,6 +162,7 @@ function hideForm() {
                     li.innerText = item;
                     view.append(li);
                 });
+
                 if(type=='unread'){
 
 
@@ -176,6 +180,10 @@ function hideForm() {
 
 
                     }
+
+                if ($('#taskView').text().indexOf('not found')>0){
+                       hide();
+                   }
 
 
             }
@@ -254,12 +262,23 @@ function hideForm() {
 
 
                     }
+                checkNotfound()
 
 
             }
         })
 
     }
+
+
+    function checkNotfound() {
+       if ($('#HRView').text().indexOf('not found')>0){
+           hide();
+       }
+    }
+
+
+
 
     function updateHR(type, id) {
         var to = document.getElementById('submitTo').value;

@@ -17,14 +17,12 @@ class TestBudget(unittest.TestCase):
     #
     def test_viewBudget(self):
 
-        self.assertEqual(B.Budget.viewBudget(1570791541),['amount: 345345',
- 'eventName: Test Event',
- 'activity: Food',
- 'budgetId: 1570791541',
- 'rejected by FM',
- ''])
+        self.assertEqual(B.Budget.viewBudget(1570791541),['amount: 345345','eventName: Test Event','activity: Food','budgetId: 1570791541','rejected by FM',''])
 
 
+    def test_submit(self):
+        self.assertTrue(B.Budget.submitTo('1570714776','HR'))
+        self.assertFalse(B.Budget.submitTo('1570196546','HR'))
 
 
 

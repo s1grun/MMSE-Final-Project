@@ -1,4 +1,5 @@
 from . import common
+import os.path
 
 class HrRequest:
     def __init__(self, role, desc, hrrId):
@@ -27,54 +28,60 @@ class HrRequest:
 
     @staticmethod
     def viewHrRequest(hrrId):
-
         fname = str(hrrId)
-        f = open('./storage/hrr/' + fname, 'r')
-        hrrequest = f.read()
-        # print(event)
-        f.close()
-        hrrequestArr = hrrequest.split('\n')
+        if os.path.isfile('./storage/hrr/' + fname):
 
-        return hrrequestArr
+            f = open('./storage/hrr/' + fname, 'r')
+            hrrequest = f.read()
+            # print(event)
+            f.close()
+            hrrequestArr = hrrequest.split('\n')
+
+            return hrrequestArr
+        else:
+            return ['request not found']
 
     @staticmethod
     def submitTo(hrrId, to, ty=None, From=None, cmt=None):
 
-        if to == 'SMPM':
-            to = 'SMPM_hr'
+        if os.path.isfile('./storage/hrr/' + hrrId):
+            if to == 'SMPM':
+                to = 'SMPM_hr'
 
-        common.updateFile(to, hrrId, hrrId + ' unread\n')
+            common.updateFile(to, hrrId, hrrId + ' unread\n')
 
-        if cmt is not None and cmt != '':
-            f2 = open('./storage/hrr/' + hrrId, 'a')
-            f2.write('comment ' + cmt + '\n')
-            f2.close()
-        if ty is not None:
-            f2 = open('./storage/hrr/' + hrrId, 'a')
-            f2.write(ty + 'ed by ' + From + '\n')
-            f2.close()
+            if cmt is not None and cmt != '':
+                f2 = open('./storage/hrr/' + hrrId, 'a')
+                f2.write('comment ' + cmt + '\n')
+                f2.close()
+            if ty is not None:
+                f2 = open('./storage/hrr/' + hrrId, 'a')
+                f2.write(ty + 'ed by ' + From + '\n')
+                f2.close()
 
-        if From is not None:
-            f = open('./storage/' + From, 'r+')
-            lines = f.read()
-            lines = lines.split('\n')
-            # print(lines)
-            new_line_arr = []
-            for line in lines:
-                print(str(line.split(' ')[0]))
-                if line.split(' ')[0] == hrrId:
-                    new_line_arr.append(hrrId + ' read\n')
-                else:
-                    new_line_arr.append(line + '\n')
-            f.close()
+            if From is not None:
+                f = open('./storage/' + From, 'r+')
+                lines = f.read()
+                lines = lines.split('\n')
+                # print(lines)
+                new_line_arr = []
+                for line in lines:
+                    # print(str(line.split(' ')[0]))
+                    if line.split(' ')[0] == hrrId:
+                        new_line_arr.append(hrrId + ' read\n')
+                    else:
+                        new_line_arr.append(line + '\n')
+                f.close()
 
-            f = open('./storage/' + From, 'w')
+                f = open('./storage/' + From, 'w')
 
-            newStr = ''.join(new_line_arr)
-            f.write(newStr)
+                newStr = ''.join(new_line_arr)
+                f.write(newStr)
 
-            # print(event)
-            f.close()
+                # print(event)
+                f.close()
 
-        return True
+            return True
+        else:
+            return False
 
